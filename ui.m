@@ -22,7 +22,7 @@ function varargout = ui(varargin)
 
 % Edit the above text to modify the response to help ui
 
-% Last Modified by GUIDE v2.5 27-Aug-2014 15:34:23
+% Last Modified by GUIDE v2.5 28-Aug-2014 14:36:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,6 +58,8 @@ handles.output = hObject;
 handles.real_points = [4 4 0; -4 4 0; -4 -4 0; 4 -4 0; 0 -2 8];
 handles.delta_points = [0 0 0; 0 0 0; 0 0 0; 0 0 0; 0 0 0];
 handles.delta_distances = [0 0 0 0 0];
+handles.rpd = 0;
+handles.rdd = 0;
 
 h = findobj('Tag', 'p1_rx');
 set(h, 'String', handles.real_points(1, 1));
@@ -134,6 +136,11 @@ set(h, 'String', handles.delta_points(5, 3));
 h = findobj('Tag', 'p5_dd');
 set(h, 'String', handles.delta_distances(5));
 
+h = findobj('Tag', 'rpd');
+set(h, 'String', handles.rpd);
+h = findobj('Tag', 'rdd');
+set(h, 'String', handles.rdd);
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -158,10 +165,13 @@ function plot_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-handles.real_points
 [X Y errors] = get_errors(handles.real_points, handles.delta_points, handles.delta_distances, -1);
 [C h] = contour(X, Y, errors);
 set(h,'ShowText','on');
+
+hold on;
+plot(handles.real_points(:, 1), handles.real_points(:, 2), 'xr');
+hold off;
 
 
 % --- Executes on button press in save_button.
@@ -1078,3 +1088,119 @@ function p1_dd_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function rpd_Callback(hObject, eventdata, handles)
+% hObject    handle to rpd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rpd as text
+%        str2double(get(hObject,'String')) returns contents of rpd as a double
+
+handles.rpd = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function rpd_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rpd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rdd_Callback(hObject, eventdata, handles)
+% hObject    handle to rdd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rdd as text
+%        str2double(get(hObject,'String')) returns contents of rdd as a double
+
+handles.rdd = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function rdd_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rdd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in generate.
+function generate_Callback(hObject, eventdata, handles)
+% hObject    handle to generate (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if handles.rpd > 0
+    handles.delta_points = random('unif', -handles.rpd, handles.rpd, size(handles.delta_points));
+    guidata(hObject, handles);
+    
+    h = findobj('Tag', 'p1_dx');
+    set(h, 'String', handles.delta_points(1, 1));
+    h = findobj('Tag', 'p1_dy');
+    set(h, 'String', handles.delta_points(1, 2));
+    h = findobj('Tag', 'p1_dz');
+    set(h, 'String', handles.delta_points(1, 3));
+    
+    h = findobj('Tag', 'p2_dx');
+    set(h, 'String', handles.delta_points(2, 1));
+    h = findobj('Tag', 'p2_dy');
+    set(h, 'String', handles.delta_points(2, 2));
+    h = findobj('Tag', 'p2_dz');
+    set(h, 'String', handles.delta_points(2, 3));
+    
+    h = findobj('Tag', 'p3_dx');
+    set(h, 'String', handles.delta_points(3, 1));
+    h = findobj('Tag', 'p3_dy');
+    set(h, 'String', handles.delta_points(3, 2));
+    h = findobj('Tag', 'p3_dz');
+    set(h, 'String', handles.delta_points(3, 3));
+    
+    h = findobj('Tag', 'p4_dx');
+    set(h, 'String', handles.delta_points(4, 1));
+    h = findobj('Tag', 'p4_dy');
+    set(h, 'String', handles.delta_points(4, 2));
+    h = findobj('Tag', 'p4_dz');
+    set(h, 'String', handles.delta_points(4, 3));
+    
+    h = findobj('Tag', 'p5_dx');
+    set(h, 'String', handles.delta_points(5, 1));
+    h = findobj('Tag', 'p5_dy');
+    set(h, 'String', handles.delta_points(5, 2));
+    h = findobj('Tag', 'p5_dz');
+    set(h, 'String', handles.delta_points(5, 3));
+end
+
+if handles.rdd > 0
+    handles.delta_distances = random('unif', 0, handles.rdd, size(handles.delta_distances));
+    guidata(hObject, handles);
+    
+    h = findobj('Tag', 'p1_dd');
+    set(h, 'String', handles.delta_distances(1));
+    h = findobj('Tag', 'p2_dd');
+    set(h, 'String', handles.delta_distances(2));
+    h = findobj('Tag', 'p3_dd');
+    set(h, 'String', handles.delta_distances(3));
+    h = findobj('Tag', 'p4_dd');
+    set(h, 'String', handles.delta_distances(4));
+    h = findobj('Tag', 'p5_dd');
+    set(h, 'String', handles.delta_distances(5));
+end
+
